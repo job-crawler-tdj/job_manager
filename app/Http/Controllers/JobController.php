@@ -16,6 +16,7 @@ class JobController extends Controller
             'total' => $jobs->total(),
             'jobs' => $jobs->items(),
             'perPage' => $perPage,
+            'currentPage' => $jobs->currentPage(),
         ]);
     }
 }
