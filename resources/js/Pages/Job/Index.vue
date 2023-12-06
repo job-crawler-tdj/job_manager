@@ -8,6 +8,7 @@
         <div class="py-12">
             <el-select v-model="condition.lastCheckTime" placeholder="Last Check Time"
                        @change="get"
+                       clearable
             >
                 <el-option label="unchecked" value="unchecked"/>
                 <el-option label="checked" value="checked"/>
@@ -19,11 +20,27 @@
                       :row-key="row => row.id">
                 <el-table-column prop="id" label="id"></el-table-column>
                 <el-table-column prop="source" label="Source"></el-table-column>
-                <el-table-column prop="company" label="Company"></el-table-column>
-                <el-table-column prop="job_name" label="Job Name">
+                <el-table-column prop="company" label="Company" min-width="150px"></el-table-column>
+                <el-table-column prop="job_name" label="Job Name" min-width="150px">
                     <template #default="scope">
-                        <a :href="scope.row.url" target="_blank"
-                           style="color: #409eff; text-decoration: underline;">{{ scope.row.job_name }}</a>
+                        <a  v-if="!scope.row.isEditing"
+                            :href="scope.row.url" target="_blank"
+                            style="color: #409eff; text-decoration: underline;">{{ scope.row.job_name }}</a>
+                        <div v-else>
+                            <div>Job name</div>
+                            <el-input
+                                @change="updateRow(scope.row)"
+                                v-model="scope.row.job_name"
+                            ></el-input>
+
+                            <div class="mt-2">Job url</div>
+                            <el-input
+                                @change="updateRow(scope.row)"
+                                v-model="scope.row.url"
+                            ></el-input>
+
+                            <el-button @click="switchEditing(scope.row)">Cancel</el-button>
+                        </div>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -147,7 +164,6 @@
                         </el-date-picker>
                     </template>
                 </el-table-column>
-                <el-table-column prop="last_seen" label="Last Seen"></el-table-column>
                 <el-table-column min-width="230px" prop="delivery_time" label="delivery_time">
                     <template #default="scope">
                         <el-date-picker
@@ -172,6 +188,10 @@
                         />
                     </template>
                 </el-table-column>
+                <el-table-column prop="last_seen"
+                                 label="Last Seen"
+                                 min-width="170px"
+                ></el-table-column>
             </el-table>
             <el-pagination
                 @size-change="handleSizeChange"
@@ -268,6 +288,8 @@ export default {
                     minAnnualSalary: row.min_annual_salary,
                     maxAnnualSalary: row.max_annual_salary,
                     starred: row.starred,
+                    jobName: row.job_name,
+                    url: row.url,
                 })
             })
                 .then(response => response.json())
