@@ -34,13 +34,24 @@
                 :total="total">
             </el-pagination>
         </div>
+        <div class="py-12">
+            <el-button @click="importJobs">Import jobs json data</el-button>
+            <el-input
+                v-model="importJson"
+                :rows="5"
+                type="textarea"
+                placeholder="Please input"
+            />
+        </div>
     </AuthenticatedLayout>
 </template>
 
 <script>
 export default {
     data() {
-        return {}
+        return {
+            importJson: '',
+        }
     },
     methods: {
         handleCurrentChange(val) {
@@ -49,6 +60,25 @@ export default {
         handleSizeChange(val) {
             window.location.href = "/jobs?perPage=" + val + "&page=" + this.currentPage;
         },
+        importJobs() {
+            fetch('/jobs', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    importJson: this.importJson
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
     }
 }
 </script>
