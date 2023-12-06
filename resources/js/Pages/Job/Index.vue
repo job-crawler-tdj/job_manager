@@ -18,8 +18,12 @@
                 <el-table-column prop="id" label="id"></el-table-column>
                 <el-table-column prop="source" label="Source"></el-table-column>
                 <el-table-column prop="company" label="Company"></el-table-column>
-                <el-table-column prop="job_name" label="Job Name"></el-table-column>
-                <el-table-column prop="url" label="URL"></el-table-column>
+                <el-table-column prop="job_name" label="Job Name">
+                    <template #default="scope">
+                        <a :href="scope.row.url" target="_blank"
+                           style="color: #409eff; text-decoration: underline;">{{ scope.row.job_name }}</a>
+                    </template>
+                </el-table-column>
                 <el-table-column
                     min-width="150px"
                     prop="min_monthly_salary"
