@@ -30,16 +30,134 @@
                         ></el-input>
                     </template>
                 </el-table-column>
-                <el-table-column prop="max_monthly_salary" label="Max Monthly Salary"></el-table-column>
-                <el-table-column prop="min_annual_salary" label="Min Annual Salary"></el-table-column>
-                <el-table-column prop="max_annual_salary" label="Max Annual Salary"></el-table-column>
-                <el-table-column prop="rating" label="Rating"></el-table-column>
-                <el-table-column prop="illegal" label="Illegal"></el-table-column>
-                <el-table-column prop="comment" label="Comment"></el-table-column>
-                <el-table-column prop="last_check_time" label="Last Check Time"></el-table-column>
+                <el-table-column
+                    min-width="150px"
+                    prop="max_monthly_salary"
+                    label="max_monthly_salary"
+                >
+                    <template #default="scope">
+                        <div @click="switchEditing(scope.row)" v-if="!scope.row.isEditing">
+                            <span>{{ scope.row.max_monthly_salary ?? '---' }}</span>
+                        </div>
+                        <el-input
+                            v-else
+                            @change="updateRow(scope.row)"
+                            v-model="scope.row.max_monthly_salary"
+                            type="number"
+                            :min="0"
+                        ></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    min-width="150px"
+                    prop="min_annual_salary"
+                    label="min_annual_salary"
+                >
+                    <template #default="scope">
+                        <div @click="switchEditing(scope.row)" v-if="!scope.row.isEditing">
+                            <span>{{ scope.row.min_annual_salary ?? '---' }}</span>
+                        </div>
+                        <el-input
+                            v-else
+                            @change="updateRow(scope.row)"
+                            v-model="scope.row.min_annual_salary"
+                            type="number"
+                            :min="0"
+                        ></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    min-width="150px"
+                    prop="max_annual_salary"
+                    label="max_annual_salary"
+                >
+                    <template #default="scope">
+                        <div @click="switchEditing(scope.row)" v-if="!scope.row.isEditing">
+                            <span>{{ scope.row.max_annual_salary ?? '---' }}</span>
+                        </div>
+                        <el-input
+                            v-else
+                            @change="updateRow(scope.row)"
+                            v-model="scope.row.max_annual_salary"
+                            type="number"
+                            :min="0"
+                        ></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="rating" label="Rating" min-width="150px">
+                    <template #default="scope">
+                        <el-rate v-model="scope.row.rating" show-score
+                                 @change="updateRow(scope.row)"
+                        ></el-rate>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="illegal" label="Illegal">
+                    <template #default="scope">
+                        <el-switch
+                            :active-value="1"
+                            :inactive-value="0"
+                            @change="updateRow(scope.row)"
+                            v-model="scope.row.illegal"
+                            class="ml-2"
+                            style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                        />
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    min-width="150px"
+                    prop="comment"
+                    label="comment"
+                >
+                    <template #default="scope">
+                        <div @click="switchEditing(scope.row)" v-if="!scope.row.isEditing">
+                            <span>{{ scope.row.comment ?? '---' }}</span>
+                        </div>
+                        <el-input
+                            v-else
+                            @change="updateRow(scope.row)"
+                            v-model="scope.row.comment"
+                            type="textarea"
+                            :rows="10"
+                        ></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column min-width="230px" prop="last_check_time" label="last_check_time">
+                    <template #default="scope">
+                        <el-date-picker
+                            v-model="scope.row.last_check_time"
+                            type="datetime"
+                            value-format="YYYY-MM-DD HH:mm:ss"
+                            @change="updateRow(scope.row)"
+                            placeholder="Select date and time"
+                        >
+                        </el-date-picker>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="last_seen" label="Last Seen"></el-table-column>
-                <el-table-column prop="delivery_time" label="Delivery Time"></el-table-column>
-                <el-table-column prop="starred" label="Starred"></el-table-column>
+                <el-table-column min-width="230px" prop="delivery_time" label="last_check_time">
+                    <template #default="scope">
+                        <el-date-picker
+                            v-model="scope.row.delivery_time"
+                            type="datetime"
+                            value-format="YYYY-MM-DD HH:mm:ss"
+                            @change="updateRow(scope.row)"
+                            placeholder="Select date and time"
+                        >
+                        </el-date-picker>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="starred" label="starred">
+                    <template #default="scope">
+                        <el-switch
+                            :active-value="1"
+                            :inactive-value="0"
+                            @change="updateRow(scope.row)"
+                            v-model="scope.row.starred"
+                            class="ml-2"
+                            style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                        />
+                    </template>
+                </el-table-column>
             </el-table>
             <el-pagination
                 @size-change="handleSizeChange"
