@@ -12,7 +12,24 @@
                 <el-table-column prop="company" label="Company"></el-table-column>
                 <el-table-column prop="job_name" label="Job Name"></el-table-column>
                 <el-table-column prop="url" label="URL"></el-table-column>
-                <el-table-column prop="min_monthly_salary" label="Min Monthly Salary"></el-table-column>
+                <el-table-column
+                    min-width="150px"
+                    prop="min_monthly_salary"
+                    label="min_monthly_salary"
+                >
+                    <template #default="scope">
+                        <div @click="switchEditing(scope.row)" v-if="!scope.row.isEditing">
+                            <span>{{ scope.row.min_monthly_salary ?? '---' }}</span>
+                        </div>
+                        <el-input
+                            v-else
+                            @change="updateRow(scope.row)"
+                            v-model="scope.row.min_monthly_salary"
+                            type="number"
+                            :min="0"
+                        ></el-input>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="max_monthly_salary" label="Max Monthly Salary"></el-table-column>
                 <el-table-column prop="min_annual_salary" label="Min Annual Salary"></el-table-column>
                 <el-table-column prop="max_annual_salary" label="Max Annual Salary"></el-table-column>
@@ -48,6 +65,9 @@
 </template>
 
 <script>
+import {toast} from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 export default {
     mounted() {
         this.get();
@@ -86,6 +106,45 @@ export default {
             this.perPage = sval;
             this.currentPage = 1;
             this.get();
+        },
+        switchEditing(row) {
+            row.isEditing = !row.isEditing;
+        },
+        updateRow(row) {
+            row.isEditing = false;
+            fetch('/jobs/' + row.id, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    lastCheckTime: row.last_check_time,
+                    rating: row.rating,
+                    deliveryTime: row.delivery_time,
+                    comment: row.comment,
+                    illegal: row.illegal,
+                    minMonthlySalary: row.min_monthly_salary,
+                    maxMonthlySalary: row.max_monthly_salary,
+                    minAnnualSalary: row.min_annual_salary,
+                    maxAnnualSalary: row.max_annual_salary,
+                    starred: row.starred,
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    toast("Update success !", {
+                        autoClose: 1000,
+                    });
+                    console.log('Success:', data);
+                    this.get();
+                })
+                .catch((error) => {
+                    toast("Update error !", {
+                        autoClose: 1000,
+                    });
+                    console.error('Error:', error);
+                });
         },
         importJobs() {
             fetch('/jobs', {
