@@ -6,6 +6,14 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Jobs</h2>
         </template>
         <div class="py-12">
+            <el-select v-model="condition.lastCheckTime" placeholder="Last Check Time"
+                       @change="get"
+            >
+                <el-option label="unchecked" value="unchecked"/>
+                <el-option label="checked" value="checked"/>
+            </el-select>
+        </div>
+        <div class="py-12">
             <el-table :data="jobs" style="width: 100%">
                 <el-table-column prop="id" label="id"></el-table-column>
                 <el-table-column prop="source" label="Source"></el-table-column>
@@ -196,11 +204,14 @@ export default {
             perPage: 10,
             currentPage: 1,
             total: 0,
+            condition: {
+                lastCheckTime: null,
+            },
         }
     },
     methods: {
         get() {
-            fetch('/jobs/list?perPage=' + this.perPage + '&page=' + this.currentPage, {
+            fetch('/jobs/list?perPage=' + this.perPage + '&page=' + this.currentPage + '&condition=' + JSON.stringify(this.condition), {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

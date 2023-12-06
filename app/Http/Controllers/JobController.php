@@ -16,8 +16,17 @@ class JobController extends Controller
 
     public function list(Request $request): JsonResponse
     {
+        $conditions = json_decode($request->input('condition'), true);
+
         return response()->json(
             Job::orderByDesc('id')
+                ->when(!empty($conditions['lastCheckTime']), function ($query) use ($conditions) {
+                    if ($conditions['lastCheckTime'] === 'checked') {
+                        $query->whereNotNull('last_check_time');
+                    } else if ($conditions['lastCheckTime'] === 'unchecked') {
+                        $query->whereNull('last_check_time');
+                    }
+                })
                 ->paginate($request->input('perPage', 10))
         );
     }
