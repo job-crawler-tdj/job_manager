@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/jobs', [JobController::class, 'index'])->name('job.index');
     Route::put('/jobs', [JobController::class, 'put'])->name('job.put');
     Route::get('/jobs/list', [JobController::class, 'list'])->name('job.list');
-    Route::put('/jobs/{id}', [JobController::class, 'patch'])->name('job.patch');
+    Route::patch('/jobs/{id}', [JobController::class, 'patch'])->name('job.patch');
 });
 
 require __DIR__.'/auth.php';
