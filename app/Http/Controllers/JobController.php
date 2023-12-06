@@ -16,7 +16,10 @@ class JobController extends Controller
 
     public function list(Request $request): JsonResponse
     {
-        return response()->json(Job::paginate($request->input('perPage', 10)));
+        return response()->json(
+            Job::orderByDesc('id')
+                ->paginate($request->input('perPage', 10))
+        );
     }
 
     public function put(Request $request)
