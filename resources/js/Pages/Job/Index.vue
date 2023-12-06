@@ -14,7 +14,9 @@
             </el-select>
         </div>
         <div class="py-12">
-            <el-table :data="jobs" style="width: 100%">
+            <el-table :data="jobs"
+                      style="width: 100%"
+                      :row-key="row => row.id">
                 <el-table-column prop="id" label="id"></el-table-column>
                 <el-table-column prop="source" label="Source"></el-table-column>
                 <el-table-column prop="company" label="Company"></el-table-column>
@@ -204,6 +206,7 @@ export default {
     },
     data() {
         return {
+            jobs: [],
             importJson: '',
             perPage: 10,
             currentPage: 1,
