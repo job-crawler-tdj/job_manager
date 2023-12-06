@@ -95,7 +95,7 @@
                 <el-table-column prop="rating" label="Rating" min-width="150px">
                     <template #default="scope">
                         <el-rate v-model="scope.row.rating" show-score
-                                 @change="updateRow(scope.row)"
+                                 @change="updateRow(scope.row, 'rating')"
                         ></el-rate>
                     </template>
                 </el-table-column>
@@ -239,8 +239,11 @@ export default {
         switchEditing(row) {
             row.isEditing = !row.isEditing;
         },
-        updateRow(row) {
+        updateRow(row, changeColumn = null) {
             row.isEditing = false;
+            if (changeColumn === 'rating') {
+                row.last_check_time = new Date().toISOString().slice(0, 19).replace('T', ' ');
+            }
             fetch('/jobs/' + row.id, {
                 method: 'PATCH',
                 headers: {
