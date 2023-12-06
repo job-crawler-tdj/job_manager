@@ -67,5 +67,7 @@ class JobController extends Controller
             'max_annual_salary' => $request->input('maxAnnualSalary'),
             'starred' => $request->input('starred'),
         ]);
+
+        return response()->json(['status' => 'success']);
     }
 }
