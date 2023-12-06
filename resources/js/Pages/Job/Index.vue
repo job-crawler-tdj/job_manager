@@ -134,7 +134,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="last_seen" label="Last Seen"></el-table-column>
-                <el-table-column min-width="230px" prop="delivery_time" label="last_check_time">
+                <el-table-column min-width="230px" prop="delivery_time" label="delivery_time">
                     <template #default="scope">
                         <el-date-picker
                             v-model="scope.row.delivery_time"
