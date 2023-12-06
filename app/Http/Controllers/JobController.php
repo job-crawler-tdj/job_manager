@@ -4,21 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Job;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
     public function index(Request $request)
     {
-        $perPage = $request->input('perPage', 10);
-        $jobs = Job::paginate($perPage);
+        return inertia('Job/Index');
+    }
 
-        return inertia('Job/Index', [
-            'total' => $jobs->total(),
-            'jobs' => $jobs->items(),
-            'perPage' => $perPage,
-            'currentPage' => $jobs->currentPage(),
-        ]);
+    public function list(Request $request): JsonResponse
+    {
+        return response()->json(Job::paginate($request->input('perPage', 10)));
     }
 
     public function put(Request $request)
@@ -49,5 +47,25 @@ class JobController extends Controller
                 ];
             })->toArray()
         );
+
+        return response()->noContent();
+    }
+
+    public function patch(Request $request, $id)
+    {
+        $job = Job::find($id);
+
+        $job->update([
+            'last_check_time' => $request->input('lastCheckTime'),
+            'rating' => $request->input('rating'),
+            'delivery_time' => $request->input('deliveryTime'),
+            'comment' => $request->input('comment'),
+            'illegal' => $request->input('illegal'),
+            'min_monthly_salary' => $request->input('minMonthlySalary'),
+            'max_monthly_salary' => $request->input('maxMonthlySalary'),
+            'min_annual_salary' => $request->input('minAnnualSalary'),
+            'max_annual_salary' => $request->input('maxAnnualSalary'),
+            'starred' => $request->input('starred'),
+        ]);
     }
 }

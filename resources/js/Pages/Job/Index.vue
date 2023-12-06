@@ -7,6 +7,7 @@
         </template>
         <div class="py-12">
             <el-table :data="jobs" style="width: 100%">
+                <el-table-column prop="id" label="id"></el-table-column>
                 <el-table-column prop="source" label="Source"></el-table-column>
                 <el-table-column prop="company" label="Company"></el-table-column>
                 <el-table-column prop="job_name" label="Job Name"></el-table-column>
@@ -48,24 +49,50 @@
 
 <script>
 export default {
+    mounted() {
+        this.get();
+    },
     data() {
         return {
             importJson: '',
+            perPage: 10,
+            currentPage: 1,
+            total: 0,
         }
     },
     methods: {
-        handleCurrentChange(val) {
-            window.location.href = "/jobs?perPage=" + this.perPage + "&page=" + val;
+        get() {
+            fetch('/jobs/list?perPage=' + this.perPage + '&page=' + this.currentPage, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    this.jobs = data.data;
+                    this.total = data.total;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
         },
-        handleSizeChange(val) {
-            window.location.href = "/jobs?perPage=" + val + "&page=" + this.currentPage;
+        handleCurrentChange(val) {
+            this.currentPage = val;
+            this.get();
+        },
+        handleSizeChange(sval) {
+            this.perPage = sval;
+            this.currentPage = 1;
+            this.get();
         },
         importJobs() {
             fetch('/jobs', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
                 body: JSON.stringify({
                     importJson: this.importJson
@@ -74,6 +101,7 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     console.log('Success:', data);
+                    this.get();
                 })
                 .catch((error) => {
                     console.error('Error:', error);
@@ -86,7 +114,5 @@ export default {
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {Head} from "@inertiajs/vue3";
-
-const {jobs, total, perPage, currentPage} = defineProps(['jobs', 'total', 'perPage', 'currentPage']);
 
 </script>
