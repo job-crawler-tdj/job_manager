@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('source');
-            $table->string('company');
+            $table->string('company')->unique();
             $table->string('job_name');
             $table->string('url');
             $table->unsignedInteger('min_monthly_salary')->nullable();
@@ -28,7 +28,8 @@ return new class extends Migration {
             $table->timestamp('last_seen')->nullable();
             $table->timestamp('delivery_time')->nullable();
             $table->boolean('starred')->default(false);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 
