@@ -6,6 +6,30 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Jobs</h2>
         </template>
         <div class="py-12">
+            <div style="color:white;">order by</div>
+            <el-select v-model="condition.orderBy" placeholder="oder by"
+                       @change="get"
+                       clearable
+            >
+                <el-option label="id" value="id"/>
+                <el-option label="last_check_time" value="last_check_time"/>
+                <el-option label="delivery_time" value="delivery_time"/>
+                <el-option label="rating" value="rating"/>
+                <el-option label="min_monthly_salary" value="min_monthly_salary"/>
+                <el-option label="max_monthly_salary" value="max_monthly_salary"/>
+                <el-option label="min_annual_salary" value="min_annual_salary"/>
+                <el-option label="max_annual_salary" value="max_annual_salary"/>
+            </el-select>
+
+            <div style="color:white;">order direction</div>
+            <el-select v-model="condition.orderDirection" placeholder="oder direction"
+                       @change="get"
+                       clearable
+            >
+                <el-option label="desc" value="desc"/>
+                <el-option label="asc" value="asc"/>
+            </el-select>
+
             <div style="color:white;">if checked</div>
             <el-select v-model="condition.lastCheckTime" placeholder="Last Check Time"
                        @change="get"
@@ -263,6 +287,8 @@ export default {
             condition: {
                 lastCheckTime: null,
                 starred: null,
+                orderDirection: 'desc',
+                orderBy: 'id',
             },
         }
     },

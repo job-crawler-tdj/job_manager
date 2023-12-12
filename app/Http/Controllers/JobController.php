@@ -17,9 +17,11 @@ class JobController extends Controller
     public function list(Request $request): JsonResponse
     {
         $conditions = json_decode($request->input('condition'), true);
+        $direction = $conditions['orderDirection'] ?? 'desc';
+        $orderBy = $conditions['orderBy'] ?? 'id';
 
         return response()->json(
-            Job::orderByDesc('id')
+            Job::orderBy($orderBy, $direction)
                 ->when(!empty($conditions['lastCheckTime']), function ($query) use ($conditions) {
                     if ($conditions['lastCheckTime'] === 'checked') {
                         $query->whereNotNull('last_check_time');
