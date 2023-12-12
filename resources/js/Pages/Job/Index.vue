@@ -23,9 +23,17 @@
                 <el-table-column prop="company" label="Company" min-width="150px"></el-table-column>
                 <el-table-column prop="job_name" label="Job Name" min-width="150px">
                     <template #default="scope">
-                        <a  v-if="!scope.row.isEditing"
-                            :href="scope.row.url" target="_blank"
-                            style="color: #409eff; text-decoration: underline;">{{ scope.row.job_name }}</a>
+                        <template v-if="!scope.row.isEditing">
+                            <a v-if="scope.row.url"
+                               :href="scope.row.url" target="_blank"
+                               style="color: #409eff; text-decoration: underline;">
+                                {{ scope.row.job_name }}
+                            </a>
+                            <span v-else>
+                                {{ scope.row.job_name }}
+                            </span>
+                        </template>
+
                         <div v-else>
                             <div>Job name</div>
                             <el-input
