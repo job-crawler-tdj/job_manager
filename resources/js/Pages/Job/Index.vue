@@ -122,6 +122,18 @@
                         ></el-rate>
                     </template>
                 </el-table-column>
+                <el-table-column prop="starred" label="starred">
+                    <template #default="scope">
+                        <el-switch
+                            :active-value="1"
+                            :inactive-value="0"
+                            @change="updateRow(scope.row)"
+                            v-model="scope.row.starred"
+                            class="ml-2"
+                            style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                        />
+                    </template>
+                </el-table-column>
                 <el-table-column prop="illegal" label="Illegal">
                     <template #default="scope">
                         <el-switch
@@ -174,18 +186,6 @@
                             placeholder="Select date and time"
                         >
                         </el-date-picker>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="starred" label="starred">
-                    <template #default="scope">
-                        <el-switch
-                            :active-value="1"
-                            :inactive-value="0"
-                            @change="updateRow(scope.row)"
-                            v-model="scope.row.starred"
-                            class="ml-2"
-                            style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
-                        />
                     </template>
                 </el-table-column>
                 <el-table-column prop="last_seen"
