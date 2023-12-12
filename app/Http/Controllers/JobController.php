@@ -27,6 +27,13 @@ class JobController extends Controller
                         $query->whereNull('last_check_time');
                     }
                 })
+                ->when(!empty($conditions['starred']), function ($query) use ($conditions) {
+                    if ($conditions['starred'] === 'true') {
+                        $query->where('starred', true);
+                    } else if ($conditions['starred'] === 'false') {
+                        $query->where('starred', false);
+                    }
+                })
                 ->paginate($request->input('perPage', 10))
         );
     }

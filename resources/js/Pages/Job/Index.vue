@@ -6,12 +6,21 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Jobs</h2>
         </template>
         <div class="py-12">
+            <div style="color:white;">if checked</div>
             <el-select v-model="condition.lastCheckTime" placeholder="Last Check Time"
                        @change="get"
                        clearable
             >
                 <el-option label="unchecked" value="unchecked"/>
                 <el-option label="checked" value="checked"/>
+            </el-select>
+            <div style="color:white;">if starred</div>
+            <el-select v-model="condition.starred" placeholder="if starred"
+                       @change="get"
+                       clearable
+            >
+                <el-option label="false" value="false"/>
+                <el-option label="true" value="true"/>
             </el-select>
         </div>
         <div class="py-12">
@@ -253,6 +262,7 @@ export default {
             total: 0,
             condition: {
                 lastCheckTime: null,
+                starred: null,
             },
         }
     },
