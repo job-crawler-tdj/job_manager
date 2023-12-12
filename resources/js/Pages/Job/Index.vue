@@ -134,6 +134,18 @@
                         />
                     </template>
                 </el-table-column>
+                <el-table-column prop="starred" label="closed">
+                    <template #default="scope">
+                        <el-switch
+                            :active-value="1"
+                            :inactive-value="0"
+                            @change="updateRow(scope.row)"
+                            v-model="scope.row.closed"
+                            class="ml-2"
+                            style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                        />
+                    </template>
+                </el-table-column>
                 <el-table-column prop="illegal" label="Illegal">
                     <template #default="scope">
                         <el-switch
@@ -288,6 +300,7 @@ export default {
                     minAnnualSalary: row.min_annual_salary,
                     maxAnnualSalary: row.max_annual_salary,
                     starred: row.starred,
+                    closed: row.closed,
                     jobName: row.job_name,
                     url: row.url,
                 })

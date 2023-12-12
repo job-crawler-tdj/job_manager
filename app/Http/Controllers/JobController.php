@@ -80,6 +80,7 @@ class JobController extends Controller
             'min_annual_salary' => $request->input('minAnnualSalary'),
             'max_annual_salary' => $request->input('maxAnnualSalary'),
             'starred' => $request->input('starred'),
+            'closed' => $request->input('closed'),
         ]);
 
         return response()->json(['status' => 'success']);
