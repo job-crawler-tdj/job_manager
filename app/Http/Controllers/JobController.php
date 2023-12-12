@@ -69,7 +69,7 @@ class JobController extends Controller
 
         $job->update([
             'job_name' => $request->input('jobName'),
-            'url' => $request->input('url'),
+            'url' => $request->input('url') ?? '',
             'last_check_time' => $request->input('lastCheckTime'),
             'rating' => $request->input('rating'),
             'delivery_time' => $request->input('deliveryTime'),
