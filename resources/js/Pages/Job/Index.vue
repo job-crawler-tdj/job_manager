@@ -232,11 +232,13 @@
                     label="comment"
                 >
                     <template #default="scope">
-                        <div @click="switchEditing(scope.row)" v-if="!scope.row.isEditing">
+                        <div @click="switchEditing(scope.row, scope.row.id + '-comment')"
+                             v-if="!scope.row.isEditing">
                             <span>{{ scope.row.comment ?? '---' }}</span>
                         </div>
                         <el-input
                             v-else
+                            :ref="scope.row.id + '-comment'"
                             @change="updateRow(scope.row)"
                             v-model="scope.row.comment"
                             type="textarea"
@@ -358,6 +360,7 @@ export default {
             if (ref) {
                 this.$nextTick(() => {
                     this.$refs[ref].focus();
+                    this.$refs[ref].select();
                 });
             }
         },
