@@ -67,7 +67,7 @@
                         <el-button
                             type="success"
                             v-else
-                            @change="updateRow(scope.row)"
+                            @click="updateRow(scope.row, null, false)"
                         >Save</el-button>
                     </template>
                 </el-table-column>
@@ -109,11 +109,13 @@
                     label="min_monthly_salary"
                 >
                     <template #default="scope">
-                        <div @click="switchEditing(scope.row)" v-if="!scope.row.isEditing">
+                        <div @click="switchEditing(scope.row, scope.row.id + '-min_monthly_salary')"
+                             v-if="!scope.row.isEditing">
                             <span>{{ scope.row.min_monthly_salary ?? '---' }}</span>
                         </div>
                         <el-input
                             v-else
+                            :ref="scope.row.id + '-min_monthly_salary'"
                             @change="updateRow(scope.row)"
                             v-model="scope.row.min_monthly_salary"
                             type="number"
@@ -127,11 +129,13 @@
                     label="max_monthly_salary"
                 >
                     <template #default="scope">
-                        <div @click="switchEditing(scope.row)" v-if="!scope.row.isEditing">
+                        <div @click="switchEditing(scope.row, scope.row.id + '-max_monthly_salary')"
+                             v-if="!scope.row.isEditing">
                             <span>{{ scope.row.max_monthly_salary ?? '---' }}</span>
                         </div>
                         <el-input
                             v-else
+                            :ref="scope.row.id + '-max_monthly_salary'"
                             @change="updateRow(scope.row)"
                             v-model="scope.row.max_monthly_salary"
                             type="number"
@@ -145,11 +149,13 @@
                     label="min_annual_salary"
                 >
                     <template #default="scope">
-                        <div @click="switchEditing(scope.row)" v-if="!scope.row.isEditing">
+                        <div @click="switchEditing(scope.row, scope.row.id + '-min_annual_salary')"
+                             v-if="!scope.row.isEditing">
                             <span>{{ scope.row.min_annual_salary ?? '---' }}</span>
                         </div>
                         <el-input
                             v-else
+                            :ref="scope.row.id + '-min_annual_salary'"
                             @change="updateRow(scope.row)"
                             v-model="scope.row.min_annual_salary"
                             type="number"
@@ -163,11 +169,13 @@
                     label="max_annual_salary"
                 >
                     <template #default="scope">
-                        <div @click="switchEditing(scope.row)" v-if="!scope.row.isEditing">
+                        <div @click="switchEditing(scope.row, scope.row.id + '-max_annual_salary')"
+                             v-if="!scope.row.isEditing">
                             <span>{{ scope.row.max_annual_salary ?? '---' }}</span>
                         </div>
                         <el-input
                             v-else
+                            :ref="scope.row.id + '-max_annual_salary'"
                             @change="updateRow(scope.row)"
                             v-model="scope.row.max_annual_salary"
                             type="number"
@@ -345,10 +353,19 @@ export default {
             this.currentPage = 1;
             this.get();
         },
-        switchEditing(row) {
-            row.isEditing = !row.isEditing;
+        switchEditing(row, ref = null) {
+            row.isEditing = true;
+            if (ref) {
+                this.$nextTick(() => {
+                    this.$refs[ref].focus();
+                });
+            }
         },
-        updateRow(row, changeColumn = null) {
+        updateRow(row, changeColumn = null, editing = null) {
+            if (editing === false) {
+                row.isEditing = false;
+            }
+
             if (changeColumn === 'rating') {
                 row.last_check_time = new Date().toISOString().slice(0, 19).replace('T', ' ');
             }
