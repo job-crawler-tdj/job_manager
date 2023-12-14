@@ -265,6 +265,11 @@
                 :total="total">
             </el-pagination>
         </div>
+        <div class="py-12">
+            <el-link href="https://github.com/job-crawler-tdj/js-script-json-fetcher" target="_blank">
+                Js for various playfrom links
+            </el-link>
+        </div>
         <div class="py-12" v-loading="importLoading">
             <el-button @click="importJobs">Import jobs json data</el-button>
             <el-input
