@@ -59,7 +59,18 @@
             <el-table :data="jobs"
                       style="width: 100%"
                       :row-key="row => row.id">
-                <el-table-column prop="id" label="id"></el-table-column>
+                <el-table-column prop="id" label="id">
+                    <template #default="scope">
+                        <div @click="switchEditing(scope.row)" v-if="!scope.row.isEditing">
+                            <span>{{ scope.row.id }}</span>
+                        </div>
+                        <el-button
+                            type="success"
+                            v-else
+                            @change="updateRow(scope.row)"
+                        >Save</el-button>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="source" label="Source"></el-table-column>
                 <el-table-column prop="company" label="Company" min-width="150px"></el-table-column>
                 <el-table-column prop="job_name" label="Job Name" min-width="150px">
@@ -338,7 +349,6 @@ export default {
             row.isEditing = !row.isEditing;
         },
         updateRow(row, changeColumn = null) {
-            row.isEditing = false;
             if (changeColumn === 'rating') {
                 row.last_check_time = new Date().toISOString().slice(0, 19).replace('T', ' ');
             }
