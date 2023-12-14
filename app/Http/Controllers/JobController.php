@@ -83,7 +83,7 @@ class JobController extends Controller
             })->toArray()
         );
 
-        return response()->noContent();
+        return response()->json(['status' => 'success']);
     }
 
     public function patch(Request $request, $id)
