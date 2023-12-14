@@ -22,6 +22,7 @@ class JobController extends Controller
 
         return response()->json(
             Job::orderBy($orderBy, $direction)
+                ->where('user_id', auth()->user()->id)
                 ->when(!empty($conditions['lastCheckTime']), function ($query) use ($conditions) {
                     if ($conditions['lastCheckTime'] === 'checked') {
                         $query->whereNotNull('last_check_time');
