@@ -45,7 +45,11 @@ class JobController extends Controller
     {
         $jobs = collect(json_decode($request->input('importJson'), true));
         $companies = $jobs->pluck('companyName')->unique()->toArray();
-        $companiesExist = Job::whereIn('company', $companies)->pluck('company')->toArray();
+        $companiesExist = Job::whereIn('company', $companies)
+            ->where('user_id', auth()->user()->id)
+            ->pluck('company')
+            ->toArray();
+
         Job::whereIn('company', $companies)->update(['last_seen' => Carbon::now()->format('Y-m-d H:i:s')]);
         $jobs = $jobs->filter(function ($job) use ($companiesExist) {
             return !in_array($job['companyName'], $companiesExist);
