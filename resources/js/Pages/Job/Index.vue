@@ -99,7 +99,11 @@
                                 v-model="scope.row.url"
                             ></el-input>
 
-                            <el-button @click="switchEditing(scope.row)">Cancel</el-button>
+                            <el-button @click="scope.row.isEditing = false"
+                                        type="danger"
+                                        class="mt-2">
+                                Cancel
+                            </el-button>
                         </div>
                     </template>
                 </el-table-column>
