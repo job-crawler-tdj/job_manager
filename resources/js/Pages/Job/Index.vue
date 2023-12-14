@@ -257,7 +257,7 @@
                 :total="total">
             </el-pagination>
         </div>
-        <div class="py-12">
+        <div class="py-12" v-loading="importLoading">
             <el-button @click="importJobs">Import jobs json data</el-button>
             <el-input
                 v-model="importJson"
@@ -284,6 +284,7 @@ export default {
             perPage: 10,
             currentPage: 1,
             total: 0,
+            importLoading: false,
             condition: {
                 lastCheckTime: null,
                 starred: null,
@@ -358,13 +359,15 @@ export default {
                     this.get();
                 })
                 .catch((error) => {
-                    toast("Update error !", {
+                    toast.error("Update failed !", {
                         autoClose: 1000,
                     });
+
                     console.error('Error:', error);
                 });
         },
         importJobs() {
+            this.importLoading = true;
             fetch('/jobs', {
                 method: 'PUT',
                 headers: {
@@ -377,11 +380,21 @@ export default {
             })
                 .then(response => response.json())
                 .then(data => {
+                    toast("Data import success !", {
+                        autoClose: 1000,
+                    });
+
                     console.log('Success:', data);
+                    this.importLoading = false;
                     this.get();
                 })
                 .catch((error) => {
                     console.error('Error:', error);
+                    toast.error("Import failed !", {
+                        autoClose: 1000,
+                    });
+
+                    this.importLoading = false;
                 });
         }
     }
