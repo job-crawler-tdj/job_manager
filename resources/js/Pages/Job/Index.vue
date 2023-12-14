@@ -46,6 +46,14 @@
                 <el-option label="false" value="false"/>
                 <el-option label="true" value="true"/>
             </el-select>
+            <div style="color:white;">if delivery</div>
+            <el-select v-model="condition.ifDelivered" placeholder="if ifDelivery"
+                       @change="get"
+                       clearable
+            >
+                <el-option label="false" value="false"/>
+                <el-option label="true" value="true"/>
+            </el-select>
         </div>
         <div class="py-12">
             <el-table :data="jobs"
@@ -290,6 +298,7 @@ export default {
                 starred: null,
                 orderDirection: 'desc',
                 orderBy: 'id',
+                ifDelivered: null,
             },
         }
     },
